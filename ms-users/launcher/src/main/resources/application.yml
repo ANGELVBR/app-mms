@@ -5,23 +5,44 @@ logging:
     org.springframework.boot.autoconfigure.jdbc: DEBUG
     org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration: DEBUG
 
+app:
+  name: ms-users
+  version: 1.0.0
+  base-path: /api/v1
+  database:
+    port: 3306
+    name: app_management
+    username: userManagement
+    password: pwdManagement
+    host: localhost
+    urlConfig: useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    
 spring:
   application:
-    name: ms-hexagonal
+    name: ms-users
   datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: 
-    driverClassName: org.h2.Driver
+    url: jdbc:mysql://${app.database.host}:${app.database.port}/${app.database.name}?${app.database.urlConfig}
+    username: ${app.database.username}
+    password: ${app.database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    defer-datasource-initialization: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    #database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: validate
+      ddl: false
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         use_sql_comments: true
-     
-  h2:
-    console.enabled: true    
+        jdbc:
+          lob:
+            non_contextual_creation: true     
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
