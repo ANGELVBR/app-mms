@@ -1,5 +1,7 @@
 package com.management.users.api.controller;
 
+import com.management.users.api.mapper.RestUserMapper;
+import com.management.users.domain.model.dto.UserDto;
 import com.management.users.domain.model.entity.User;
 import com.management.users.domain.usecase.FindAllUserUseCase;
 import com.management.users.domain.usecase.FindUserByIdUseCase;
@@ -26,6 +28,8 @@ public class UserController {
   private final @NonNull FindUserByIdUseCase findUserByIdUseCase;
 
   private final @NonNull FindUserByUserNameUseCase findUserByUserNameUseCase;
+  
+  private final @NonNull RestUserMapper restUserMapper;
 
   
   @Operation(summary = "Get all users")
@@ -38,11 +42,11 @@ public class UserController {
       @ApiResponse(responseCode = "404", description = "User not found",
           content = @Content) })
   @GetMapping("/")
-  public ResponseEntity<List<User>> getUsers() {
+  public ResponseEntity<List<UserDto>> getUsers() {
 
     List<User> users = this.findAllUserUseCase.findAllUser();
 
-    return ResponseEntity.ok(users);
+    return ResponseEntity.ok(this.restUserMapper.toDtos(users));
   }
 
   @Operation(summary = "Get users by id")
@@ -55,10 +59,10 @@ public class UserController {
       @ApiResponse(responseCode = "404", description = "User not found",
           content = @Content) })
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable Long id) {
+  public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
     User user = findUserByIdUseCase.findUserById(id);
     if (user != null) {
-      return ResponseEntity.ok(user);
+      return ResponseEntity.ok(this.restUserMapper.toDto(user));
     }
     return ResponseEntity.notFound().build();
   }
@@ -73,10 +77,10 @@ public class UserController {
       @ApiResponse(responseCode = "404", description = "User not found",
           content = @Content) })
   @GetMapping("/username/")
-  public ResponseEntity<User> getUserByUserName(@RequestParam String username) {
+  public ResponseEntity<UserDto> getUserByUserName(@RequestParam String username) {
     User user = findUserByUserNameUseCase.findUserByUserName(username);
     if (user != null) {
-      return ResponseEntity.ok(user);
+      return ResponseEntity.ok(this.restUserMapper.toDto(user));
     }
     return ResponseEntity.notFound().build();
   }
