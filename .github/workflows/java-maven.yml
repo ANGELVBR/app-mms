@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven Ms-database
-        run: ./ms-database/mvn clean compile
+        run: ./ms-database/mvnw clean compile
 
       - name: Run tests
-        run: ./ms-database/mvn test
+        run: ./ms-database/mvnw test
