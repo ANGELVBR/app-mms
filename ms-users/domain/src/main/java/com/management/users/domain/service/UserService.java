@@ -12,7 +12,7 @@ public interface UserService {
 
   User findById(Long id);
 
-  User update(User user, Long id);
+  User update(User user);
 
   User updatePassword(String password, Long id);
 

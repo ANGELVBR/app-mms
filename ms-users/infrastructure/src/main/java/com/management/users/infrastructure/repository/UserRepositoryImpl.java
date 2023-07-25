@@ -49,10 +49,10 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public User update(User user, Long id) {
-    LOG.debug("[update] Start update: user : '{}', id : '{}'", user, id);
+  public User update(User user) {
+    LOG.debug("[update] Start update: user : '{}'", user);
 
-    Optional<UserJpa> userExits = this.userRepositoryJpa.findById(id);
+    Optional<UserJpa> userExits = this.userRepositoryJpa.findById(user.getId());
     if (userExits.isPresent()) {
       UserJpa userJpa = userExits.get();
 
@@ -62,7 +62,7 @@ public class UserRepositoryImpl implements UserRepository {
       return this.userMapper.toEntity(this.userRepositoryJpa.save(userJpa));
     }
 
-    LOG.warn("[update] user not found. id: '{}', ", id);
+    LOG.warn("[update] user not found. id: '{}', ", user.getId());
     return user;
   }
 

@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public User update(User user, Long id) {
-    LOG.debug("[update] Start update: User: '{}' : id : '{}'", user, id);
-    return this.userRepository.update(user, id);
+  public User update(User user) {
+    LOG.debug("[update] Start update: User: '{}' : ", user);
+    return this.userRepository.update(user);
   }
 
   @Override

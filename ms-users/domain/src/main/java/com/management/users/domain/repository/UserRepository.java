@@ -10,7 +10,7 @@ public interface UserRepository {
 
   User findByUsername(String username);
 
-  User update(User user, Long id);
+  User update(User user);
 
   User updatePassword(String password, Long id);
 
