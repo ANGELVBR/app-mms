@@ -1,7 +1,6 @@
 package com.management.users.application.usecase;
 
 import com.management.users.domain.data.UserData;
-import com.management.users.domain.model.dto.UserDto;
 import com.management.users.domain.model.entity.User;
 import com.management.users.domain.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

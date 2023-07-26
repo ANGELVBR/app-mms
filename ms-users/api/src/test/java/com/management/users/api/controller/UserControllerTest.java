@@ -1,16 +1,17 @@
 package com.management.users.api.controller;
 
+import com.management.api.user.dto.UserDto;
+import com.management.api.user.dto.UsersDto;
 import com.management.users.api.data.UserDtoData;
+import com.management.users.api.data.UsersDtoData;
 import com.management.users.api.mapper.RestUserMapper;
 import com.management.users.domain.data.UserData;
-import com.management.users.domain.model.dto.UserDto;
 import com.management.users.domain.model.entity.User;
 import com.management.users.domain.usecase.FindAllUserUseCase;
 import com.management.users.domain.usecase.FindUserByIdUseCase;
 import com.management.users.domain.usecase.FindUserByUserNameUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,23 +48,26 @@ class UserControllerTest {
   UserData userData;
   UserDtoData userDtoData;
 
+  UsersDtoData usersDtoData;
+
   @BeforeEach
   void setUp() {
 
     this.userData = new UserData();
     this.userDtoData = new UserDtoData();
+    this.usersDtoData = new UsersDtoData();
   }
   
   @Test
   @DisplayName("Test by Get all users - there are users")
   void getUsers() {
     final List<User> userList = this.userData.getList();
-    final List<UserDto> userDtoList = this.userDtoData.getList();
+    final List<UsersDto> userDtoList = this.usersDtoData.getList();
 
     when(this.findAllUserUseCase.findAllUser()).thenReturn(userList);
-    when(this.restUserMapper.toDtos(anyList())).thenReturn(userDtoList);
+    when(this.restUserMapper.toUsersDtos(anyList())).thenReturn(userDtoList);
 
-    final ResponseEntity<List<UserDto>> result = this.controller.getUsers();
+    final ResponseEntity<List<UsersDto>> result = this.controller.getUsers();
     
     assertNotNull(result);
     assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -72,7 +76,7 @@ class UserControllerTest {
     assertEquals(userDtoList, result.getBody());
     
     verify(this.findAllUserUseCase).findAllUser();
-    verify(this.restUserMapper).toDtos(anyList());
+    verify(this.restUserMapper).toUsersDtos(anyList());
 
   }
 
@@ -80,9 +84,9 @@ class UserControllerTest {
   @DisplayName("Test by Get all users - there are no users")
   void getUsersEmpty() {
     when(this.findAllUserUseCase.findAllUser()).thenReturn(Collections.emptyList());
-    when(this.restUserMapper.toDtos(anyList())).thenReturn(Collections.emptyList());
+    when(this.restUserMapper.toUsersDtos(anyList())).thenReturn(Collections.emptyList());
 
-    final ResponseEntity<List<UserDto>> result = this.controller.getUsers();
+    final ResponseEntity<List<UsersDto>> result = this.controller.getUsers();
 
     assertNotNull(result);
     assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -91,7 +95,7 @@ class UserControllerTest {
     assertEquals(Collections.emptyList(), result.getBody());
 
     verify(this.findAllUserUseCase).findAllUser();
-    verify(this.restUserMapper).toDtos(anyList());
+    verify(this.restUserMapper).toUsersDtos(anyList());
 
   }
 
@@ -102,9 +106,9 @@ class UserControllerTest {
     final UserDto userDto = this.userDtoData.get(1);
 
     when(this.findUserByIdUseCase.findUserById(anyLong())).thenReturn(user);
-    when(this.restUserMapper.toDto(any())).thenReturn(userDto);
+    when(this.restUserMapper.toUserDto(any())).thenReturn(userDto);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserById(1L);
+    final ResponseEntity<UserDto> result = this.controller.getUserById(1);
 
     assertNotNull(result);
     assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -112,7 +116,7 @@ class UserControllerTest {
     assertEquals(userDto, result.getBody());
 
     verify(this.findUserByIdUseCase).findUserById(anyLong());
-    verify(this.restUserMapper).toDto(any());
+    verify(this.restUserMapper).toUserDto(any());
     
   }
 
@@ -121,14 +125,14 @@ class UserControllerTest {
   void getUserByIdEmpty() {
     when(this.findUserByIdUseCase.findUserById(anyLong())).thenReturn(null);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserById(1L);
+    final ResponseEntity<UserDto> result = this.controller.getUserById(1);
 
     assertNotNull(result);
     assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     assertNull(result.getBody());
 
     verify(this.findUserByIdUseCase).findUserById(anyLong());
-    verify(this.restUserMapper, never()).toDto(any());
+    verify(this.restUserMapper, never()).toUserDto(any());
   }
 
   @Test
@@ -138,7 +142,7 @@ class UserControllerTest {
     final UserDto userDto = this.userDtoData.get(1);
 
     when(this.findUserByUserNameUseCase.findUserByUserName(anyString())).thenReturn(user);
-    when(this.restUserMapper.toDto(any())).thenReturn(userDto);
+    when(this.restUserMapper.toUserDto(any())).thenReturn(userDto);
 
     final ResponseEntity<UserDto> result = this.controller.getUserByUserName("username");
 
@@ -148,7 +152,7 @@ class UserControllerTest {
     assertEquals(userDto, result.getBody());
 
     verify(this.findUserByUserNameUseCase).findUserByUserName(anyString());
-    verify(this.restUserMapper).toDto(any());
+    verify(this.restUserMapper).toUserDto(any());
   }
 
   @Test
@@ -164,6 +168,6 @@ class UserControllerTest {
     assertNull(result.getBody());
 
     verify(this.findUserByUserNameUseCase).findUserByUserName(anyString());
-    verify(this.restUserMapper, never()).toDto(any());
+    verify(this.restUserMapper, never()).toUserDto(any());
   }
 }

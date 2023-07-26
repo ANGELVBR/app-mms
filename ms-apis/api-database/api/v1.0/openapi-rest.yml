@@ -1,0 +1,227 @@
+openapi: 3.0.3
+
+info:
+  title: Api Management Database
+  description: Provides endpoints to manage the database
+  contact:
+    name: Angel Villa
+    email: angel.villa@gmail.com
+    url: 'https://github.com/ANGELVBR'
+  version: 0.0.0
+
+servers:
+  - url: http://localhost.com:8001/
+    description: local dev server
+    
+tags:
+  - name: History
+    description: Operations about history script database
+      
+security:
+  - itxBasicAuth: []
+      
+paths:
+  /api/v1/histories:
+    get:
+      tags:
+        - History
+      summary: Returns all script histories
+      description: Returns all script histories
+      operationId: getHistorical
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Histories"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"
+  /api/v1/histories/{historyId}:
+    get:
+      tags:
+        - History
+      summary: Returns history by id
+      description: Returns history by id
+      operationId: getHistoricalById
+      parameters:
+        - $ref: "#/components/parameters/historyId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/History"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"         
+components:
+  securitySchemes:
+    itxBasicAuth:
+      type: http
+      scheme: basic
+    itxBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServiceUnavailable:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    GatewayTimeout:
+      description: Gateway Timeout
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Default:
+      description: Default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  parameters:
+    historyId:
+      name: historyId
+      in: path
+      description: Id history
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 1
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          description: Error code
+          type: string
+          example: "400"
+        message:
+          description: Error message
+          type: string
+          example: "Bad Request"
+    History:
+      type: object
+      properties:
+        id:
+          description: Id execution
+          type: integer
+          format: int32
+          example: 1
+        version:
+          description: version
+          type: string
+          example: "1.0.0"
+        description:
+          description: Description history
+          type: string
+          example: "Schema"
+        type:
+          description: type script
+          type: string
+          example: "SQL"
+        script:
+          description: Script name
+          type: string
+          example: "v1/V1.0.0__Schema.sql"
+        installedBy:
+          description: installed By
+          type: string
+          example: "name user"
+        installedOn:
+          description: installedOn
+          type: string
+          format: date-time
+          example: "2023-07-25 07:52:36"
+        executionTime:
+          description: execution time
+          type: string
+          example: "1077"
+        success:
+          description: execution time
+          type: boolean
+          example: "true"
+    Histories:
+        type: object
+        properties:
+          id:
+            description: Id execution
+            type: integer
+            format: int32
+            example: 1
+          version:
+            description: version
+            type: string
+            example: "1.0.0"
+          description:
+            description: Description history
+            type: string
+            example: "Schema"
+          type:
+            description: type script
+            type: string
+            example: "SQL"
+          installedOn:
+            description: installedOn
+            type: string
+            format: date-time
+            example: "2023-07-25 07:52:36"
+          success:
+            description: execution time
+            type: boolean
+            example: "true"

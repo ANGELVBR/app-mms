@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.management.apis</groupId>
+        <artifactId>ms-apis</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>${project.parent.artifactId}-database</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>5.3.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/api/v${version}/openapi-rest.yml</inputSpec>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <generatorName>spring</generatorName>
+                            <modelNameSuffix>Dto</modelNameSuffix>
+                            <configOptions>
+                                <packageName>com.management.api.database</packageName>
+                                <invokerPackage>com.management.api.database.services</invokerPackage>
+                                <apiPackage>com.management.api.database.services</apiPackage>
+                                <modelPackage>com.management.api.database.dto</modelPackage>
+                                <basePackage>com.management.api.database</basePackage>
+                                <configPackage>com.management.api.database</configPackage>
+                                <sourceFolder>/src/gen/java/main</sourceFolder>
+                                <delegatePattern>true</delegatePattern>
+                                <useTags>true</useTags>
+                                <singleContentTypes>true</singleContentTypes>
+                                <interfaceOnly>true</interfaceOnly>
+                                <serializableModel>true</serializableModel>
+                                <dateLibrary>java8</dateLibrary>
+                                <useOptional>true</useOptional>
+                                <swaggerDocketConfig>false</swaggerDocketConfig>
+                                <performBeanValidation>false</performBeanValidation>
+                                <useBeanValidation>false</useBeanValidation>
+                            </configOptions>
+
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
