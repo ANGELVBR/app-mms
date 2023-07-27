@@ -19,7 +19,8 @@ For the management of the database, the microservice uses the [Flyway](https://f
   
 - Also, you can see the definition of the endpoint in local swagger '/swagger-ui/index.html'.
 
-
+### Pre-requisites
+- Api definition exists in the api module. [Readme](../ms-api/README.md)
 
 
 

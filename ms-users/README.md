@@ -1,4 +1,4 @@
-# app-management
+# ms-users
 User microservices.
 This microservice is responsible for managing the user of the application.
 It is responsible for creating, updating and deleting the user.
@@ -22,3 +22,4 @@ It is responsible for creating, updating and deleting the user.
 
 ### Pre-requisites
 - Run the database management microservice. [Readme](../ms-database/README.md)
+- Api definition exists in the api module. [Readme](../ms-api/README.md)
