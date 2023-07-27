@@ -32,6 +32,12 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <checkstyle-maven-plugin.version>3.2.0</checkstyle-maven-plugin.version>
+    
+    <!-- Reference to api -->
+    <api-user.groupId>com.management.apis</api-user.groupId>
+    <api-user.artifactId>ms-apis-users</api-user.artifactId>
+    <api-user.version>1.0</api-user.version>
+    
   </properties>
 
 
@@ -62,6 +68,14 @@
         <artifactId>launcher</artifactId>
         <version>${project.version}</version>
       </dependency>
+      
+      <!-- Reference to api -->
+      <dependency>
+        <groupId>${api-user.groupId}</groupId>
+        <artifactId>${api-user.artifactId}</artifactId>
+        <version>${api-user.version}</version>
+      </dependency>
+      
     </dependencies>
   </dependencyManagement>
 
@@ -114,6 +128,13 @@
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-checkstyle-plugin</artifactId>
       <version>${checkstyle-maven-plugin.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
     </dependency>
    
   </dependencies>

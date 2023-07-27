@@ -1,0 +1,250 @@
+openapi: 3.0.3
+
+info:
+  title: Api Microservice Users
+  description: Api Microservice Users, this api is responsible for managing the users of the application 
+  contact:
+    name: Angel Villa
+    email: angel.villa@gmail.com
+    url: 'https://github.com/ANGELVBR'
+  version: 1.0.0
+
+servers:
+  - url: http://localhost.com:8002/
+    description: local dev server
+    
+tags:
+  - name: Version
+    description: Operations about version
+  - name: Users
+    description: Operations about users
+      
+security:
+  - itxBasicAuth: []
+      
+paths:
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      summary: Returns all users activate
+      description: Returns users list
+      operationId: getUsers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Users"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"
+  /api/v1/users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Returns user by id
+      description: Returns user by id
+      operationId: getUserById
+      parameters:
+        - $ref: "#/components/parameters/userId"      
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"
+  /api/v1/users/find:
+    get:
+      tags:
+        - Users
+      summary: Returns user by username
+      description: Returns user by username
+      operationId: getUserByUserName
+      parameters:
+        - $ref: "#/components/parameters/userName"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"          
+components:
+  securitySchemes:
+    itxBasicAuth:
+      type: http
+      scheme: basic
+    itxBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServiceUnavailable:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    GatewayTimeout:
+      description: Gateway Timeout
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Default:
+      description: Default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  parameters: 
+    userId:
+      name: userId
+      in: path
+      description: Id user
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 1
+    userName:
+      name: userName
+      in: query
+      description: Name user
+      required: true
+      schema:
+          type: string
+          example: "the email of the user"
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          description: Error code
+          type: string
+          example: "400"
+        message:
+          description: Error message
+          type: string
+          example: "Bad Request"          
+    Users:
+      type: object
+      properties:
+        id:
+          description: Id user
+          type: integer
+          format: int32
+          example: 1
+        name:
+          description: Name user
+          type: string
+          example: "the name of the user"
+        email:
+          description: Email user
+          type: string
+          example: "the mail of the user"
+    User:
+      type: object
+      properties:
+        id:
+          description: Id user
+          type: integer
+          format: int32
+          example: 1
+        name:
+          description: Name user
+          type: string
+          example: "the name of the user"
+        email:
+          description: Email user
+          type: string
+          example: "the mail of the user"
+        createDate:
+          description: Email user
+          type: string
+          format: date-time
+          example: "the create date of the user"
+        roles:
+            description: Roles of the user
+            type: array
+            items:
+                $ref: "#/components/schemas/Role"
+    Role:
+      type: object
+      properties:
+        code:
+          description: Code of the role
+          type: string
+          example: "admin"
+        description:
+          description: Description of the role
+          type: string
+          example: "Administration role"            

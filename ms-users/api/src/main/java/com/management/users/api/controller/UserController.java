@@ -1,7 +1,9 @@
 package com.management.users.api.controller;
 
+import com.management.api.user.dto.UserDto;
+import com.management.api.user.dto.UsersDto;
+import com.management.api.user.services.UsersApi;
 import com.management.users.api.mapper.RestUserMapper;
-import com.management.users.domain.model.dto.UserDto;
 import com.management.users.domain.model.entity.User;
 import com.management.users.domain.usecase.FindAllUserUseCase;
 import com.management.users.domain.usecase.FindUserByIdUseCase;
@@ -19,9 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("${app.base-path}/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UsersApi {
 
   private final @NonNull FindAllUserUseCase findAllUserUseCase;
 
@@ -31,58 +32,29 @@ public class UserController {
   
   private final @NonNull RestUserMapper restUserMapper;
 
-  
-  @Operation(summary = "Get all users")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Found the users",
-          content = { @Content(mediaType = "application/json",
-              schema = @Schema(implementation = User.class)) }),
-      @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-          content = @Content),
-      @ApiResponse(responseCode = "404", description = "User not found",
-          content = @Content) })
-  @GetMapping("/")
-  public ResponseEntity<List<UserDto>> getUsers() {
+  @Override
+  public ResponseEntity<UserDto> getUserById(Integer userId) {
+    User user = findUserByIdUseCase.findUserById(Long.valueOf(userId));
+    if (user != null) {
+      return ResponseEntity.ok(this.restUserMapper.toUserDto(user));
+    }
+    return ResponseEntity.notFound().build();
+  }
 
+  @Override
+  public ResponseEntity<UserDto> getUserByUserName(String userName) {
+    User user = findUserByUserNameUseCase.findUserByUserName(userName);
+    if (user != null) {
+      return ResponseEntity.ok(this.restUserMapper.toUserDto(user));
+    }
+    return ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<List<UsersDto>> getUsers() {
     List<User> users = this.findAllUserUseCase.findAllUser();
 
-    return ResponseEntity.ok(this.restUserMapper.toDtos(users));
-  }
-
-  @Operation(summary = "Get users by id")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Found the user by id",
-          content = { @Content(mediaType = "application/json",
-              schema = @Schema(implementation = User.class)) }),
-      @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-          content = @Content),
-      @ApiResponse(responseCode = "404", description = "User not found",
-          content = @Content) })
-  @GetMapping("/{id}")
-  public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-    User user = findUserByIdUseCase.findUserById(id);
-    if (user != null) {
-      return ResponseEntity.ok(this.restUserMapper.toDto(user));
-    }
-    return ResponseEntity.notFound().build();
-  }
-
-  @Operation(summary = "Get user by username")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Found the users by username",
-          content = { @Content(mediaType = "application/json",
-              schema = @Schema(implementation = User.class)) }),
-      @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-          content = @Content),
-      @ApiResponse(responseCode = "404", description = "User not found",
-          content = @Content) })
-  @GetMapping("/username/")
-  public ResponseEntity<UserDto> getUserByUserName(@RequestParam String username) {
-    User user = findUserByUserNameUseCase.findUserByUserName(username);
-    if (user != null) {
-      return ResponseEntity.ok(this.restUserMapper.toDto(user));
-    }
-    return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(this.restUserMapper.toUsersDtos(users));
   }
 
 }

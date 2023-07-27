@@ -1,7 +1,6 @@
 package com.management.users.api.data;
 
-import com.management.users.domain.model.dto.RoleDto;
-import com.management.users.domain.model.entity.Role;
+import com.management.api.user.dto.RoleDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +28,11 @@ public class RoleDtoData {
   }
 
   private RoleDto generate(final Integer i) {
-    final Integer id = this.keyGenerator.getAndIncrement();
-    return RoleDto.builder()
-            .id(id)
-            .code("CODE_" + id)
-            .description("DESCRIPTION_" + id)
-            .build();
+    final int id = this.keyGenerator.getAndIncrement();
+    RoleDto roleDto = new RoleDto();
+    roleDto.setCode("CODE_" + id);
+    roleDto.setDescription("DESCRIPTION_" + id);
+    return roleDto;
   }
 
   public RoleDto get(final Integer id) {

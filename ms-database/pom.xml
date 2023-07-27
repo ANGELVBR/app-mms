@@ -22,6 +22,11 @@
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<lombok.version>1.18.28</lombok.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+
+		<!-- Reference to api -->
+		<api-database.groupId>com.management.apis</api-database.groupId>
+		<api-database.artifactId>ms-apis-database</api-database.artifactId>
+		<api-database.version>1.0</api-database.version>
 	</properties>
 	
 	<dependencies>
@@ -63,12 +68,13 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Dependency swagger -->
+		<!-- Reference to api -->
 		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.0.2</version>
+			<groupId>${api-database.groupId}</groupId>
+			<artifactId>${api-database.artifactId}</artifactId>
+			<version>${api-database.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -187,6 +193,52 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<!-- Generate api class in generate sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<id>copy-api-user-classes</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${api-database.groupId}</groupId>
+									<artifactId>${api-database.artifactId}</artifactId>
+									<version>${api-database.version}</version>
+									<outputDirectory>${project.build.directory}/generated-sources/openapi</outputDirectory>
+									<includes>**/*.class</includes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Add generate sources to compilation -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>add-generated-sources-to-compilation</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/openapi</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

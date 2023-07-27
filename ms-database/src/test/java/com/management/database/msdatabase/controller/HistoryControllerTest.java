@@ -1,11 +1,11 @@
 package com.management.database.msdatabase.controller;
 
+import com.management.api.database.dto.HistoriesDto;
+import com.management.api.database.dto.HistoryDto;
 import com.management.database.msdatabase.data.HistoryFlyWayData;
-import com.management.database.msdatabase.data.HistoryFlyWayJpaData;
 import com.management.database.msdatabase.domain.entity.HistoryFlyWay;
 import com.management.database.msdatabase.domain.services.HistoryFlyWayService;
-import com.management.database.msdatabase.models.jpa.HistoryFlyWayJpa;
-import com.management.database.msdatabase.service.HistoryFlyWayServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,14 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,7 +46,7 @@ class HistoryControllerTest {
 
         when(this.historyFlyWayService.findAll()).thenReturn(historyFlyWaysList);
 
-        final ResponseEntity<List<HistoryFlyWay>> result = this.controller.getHistorical();
+        final ResponseEntity<List<HistoriesDto>> result = this.controller.getHistorical();
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -64,12 +62,12 @@ class HistoryControllerTest {
 
         when(this.historyFlyWayService.findById(anyInt())).thenReturn(historyFlyWays);
 
-        final ResponseEntity<HistoryFlyWay> result = this.controller.getHistoricalById(1);
+        final ResponseEntity<HistoryDto> result = this.controller.getHistoricalById(1);
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertNotNull(result.getBody());
-        assertEquals(historyFlyWays.getInstalledRank(), result.getBody().getInstalledRank());
+        assertEquals(historyFlyWays.getInstalledRank(), result.getBody().getId());
 
         verify(this.historyFlyWayService).findById(anyInt());
     }
@@ -79,7 +77,7 @@ class HistoryControllerTest {
 
         when(this.historyFlyWayService.findById(anyInt())).thenReturn(null);
 
-        final ResponseEntity<HistoryFlyWay> result = this.controller.getHistoricalById(1);
+        final ResponseEntity<HistoryDto> result = this.controller.getHistoricalById(1);
 
         assertNotNull(result);
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
