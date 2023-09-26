@@ -53,6 +53,74 @@ paths:
           $ref: "#/components/responses/GatewayTimeout"
         default:
           $ref: "#/components/responses/Default"
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Create user
+      operationId: createUser
+      requestBody:
+        description: Update to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"      
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetail"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"
+    put:
+      tags:
+        - Users
+      summary: Update user
+      description: Update user
+      operationId: updateUser
+      requestBody:
+        description: User to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetail"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"
   /api/v1/users/{userId}:
     get:
       tags:
@@ -68,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserDetail"
         '400':
           $ref: "#/components/responses/BadRequest"
         '403':
@@ -83,7 +151,32 @@ paths:
           $ref: "#/components/responses/GatewayTimeout"
         default:
           $ref: "#/components/responses/Default"
-  /api/v1/users/find:
+    delete:
+      tags:
+        - Users
+      summary: Delete user by id
+      description: Delete user by id
+      operationId: deleteUserById
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '503':
+          $ref: "#/components/responses/ServiceUnavailable"
+        '504':
+          $ref: "#/components/responses/GatewayTimeout"
+        default:
+          $ref: "#/components/responses/Default"          
+  /api/v1/users/login:
     get:
       tags:
         - Users
@@ -98,7 +191,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserDetail"
         '400':
           $ref: "#/components/responses/BadRequest"
         '403':
@@ -211,7 +304,7 @@ components:
           description: Email user
           type: string
           example: "the mail of the user"
-    User:
+    UserDetail:
       type: object
       properties:
         id:
@@ -236,8 +329,8 @@ components:
             description: Roles of the user
             type: array
             items:
-                $ref: "#/components/schemas/Role"
-    Role:
+                $ref: "#/components/schemas/RoleDetail"
+    RoleDetail:
       type: object
       properties:
         code:
@@ -248,3 +341,31 @@ components:
           description: Description of the role
           type: string
           example: "Administration role"            
+    User:
+      type: object
+      properties:
+        id:
+          description: Id user
+          type: integer
+          format: int32
+          example: 1
+        name:
+          description: Name user
+          type: string
+          example: "the name of the user"
+        email:
+          description: Email user
+          type: string
+          example: "the mail of the user"
+        roles:
+          description: Roles of the user
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+    Role:
+      type: object
+      properties:
+        code:
+          description: Code of the role
+          type: string
+          example: "admin"
