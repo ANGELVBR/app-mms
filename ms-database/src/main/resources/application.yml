@@ -2,6 +2,7 @@ server:
     port: 8001
 
 logging:
+  root: INFO
   level:
     org:
       hibernate:
@@ -14,11 +15,16 @@ app:
   database:
     port: 3306
     name: app_management
-    username: userManagement
+    username: root
     password: pwdManagement
     host: localhost
     urlConfig: useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-       
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      
 spring:
   application:
     name: ms-database

@@ -1,5 +1,6 @@
 package com.management.users.api.controller;
 
+import com.management.api.user.dto.UserDetailDto;
 import com.management.api.user.dto.UserDto;
 import com.management.api.user.dto.UsersDto;
 import com.management.api.user.services.UsersApi;
@@ -33,7 +34,7 @@ public class UserController implements UsersApi {
   private final @NonNull RestUserMapper restUserMapper;
 
   @Override
-  public ResponseEntity<UserDto> getUserById(Integer userId) {
+  public ResponseEntity<UserDetailDto> getUserById(Integer userId) {
     User user = findUserByIdUseCase.findUserById(Long.valueOf(userId));
     if (user != null) {
       return ResponseEntity.ok(this.restUserMapper.toUserDto(user));
@@ -42,13 +43,14 @@ public class UserController implements UsersApi {
   }
 
   @Override
-  public ResponseEntity<UserDto> getUserByUserName(String userName) {
+  public ResponseEntity<UserDetailDto> getUserByUserName(String userName) {
     User user = findUserByUserNameUseCase.findUserByUserName(userName);
     if (user != null) {
       return ResponseEntity.ok(this.restUserMapper.toUserDto(user));
     }
     return ResponseEntity.notFound().build();
   }
+
 
   @Override
   public ResponseEntity<List<UsersDto>> getUsers() {

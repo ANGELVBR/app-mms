@@ -1,6 +1,7 @@
 package com.management.users.api.mapper;
 
 
+import com.management.api.user.dto.UserDetailDto;
 import com.management.api.user.dto.UserDto;
 import com.management.api.user.dto.UsersDto;
 import com.management.users.api.mapper.utils.MappingUtils;
@@ -23,7 +24,7 @@ import java.util.List;
 public interface RestUserMapper {
 
   @Mapping(source = "createDate", target = "createDate", qualifiedByName = "dateToOffset")
-  UserDto toUserDto(User src);
+  UserDetailDto toUserDto(User src);
 
   UsersDto toUsersDto(User src);
 

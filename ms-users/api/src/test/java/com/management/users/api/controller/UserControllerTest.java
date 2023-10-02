@@ -1,7 +1,9 @@
 package com.management.users.api.controller;
 
+import com.management.api.user.dto.UserDetailDto;
 import com.management.api.user.dto.UserDto;
 import com.management.api.user.dto.UsersDto;
+import com.management.users.api.data.UserDetailDtoData;
 import com.management.users.api.data.UserDtoData;
 import com.management.users.api.data.UsersDtoData;
 import com.management.users.api.mapper.RestUserMapper;
@@ -46,7 +48,7 @@ class UserControllerTest {
   UserController controller;
 
   UserData userData;
-  UserDtoData userDtoData;
+  UserDetailDtoData userDetailDtoData;
 
   UsersDtoData usersDtoData;
 
@@ -54,7 +56,7 @@ class UserControllerTest {
   void setUp() {
 
     this.userData = new UserData();
-    this.userDtoData = new UserDtoData();
+    this.userDetailDtoData = new UserDetailDtoData();
     this.usersDtoData = new UsersDtoData();
   }
   
@@ -103,12 +105,12 @@ class UserControllerTest {
   @DisplayName("Test by Get users by id - there is user")
   void getUserById() {
     final User user = this.userData.get(1);
-    final UserDto userDto = this.userDtoData.get(1);
+    final UserDetailDto userDto = this.userDetailDtoData.get(1);
 
     when(this.findUserByIdUseCase.findUserById(anyLong())).thenReturn(user);
     when(this.restUserMapper.toUserDto(any())).thenReturn(userDto);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserById(1);
+    final ResponseEntity<UserDetailDto> result = this.controller.getUserById(1);
 
     assertNotNull(result);
     assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -125,7 +127,7 @@ class UserControllerTest {
   void getUserByIdEmpty() {
     when(this.findUserByIdUseCase.findUserById(anyLong())).thenReturn(null);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserById(1);
+    final ResponseEntity<UserDetailDto> result = this.controller.getUserById(1);
 
     assertNotNull(result);
     assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
@@ -139,12 +141,12 @@ class UserControllerTest {
   @DisplayName("Test by Get users by username - there is user")
   void getUserByUserName() {
     final User user = this.userData.get(1);
-    final UserDto userDto = this.userDtoData.get(1);
+    final UserDetailDto userDto = this.userDetailDtoData.get(1);
 
     when(this.findUserByUserNameUseCase.findUserByUserName(anyString())).thenReturn(user);
     when(this.restUserMapper.toUserDto(any())).thenReturn(userDto);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserByUserName("username");
+    final ResponseEntity<UserDetailDto> result = this.controller.getUserByUserName("username");
 
     assertNotNull(result);
     assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -161,7 +163,7 @@ class UserControllerTest {
 
     when(this.findUserByUserNameUseCase.findUserByUserName(anyString())).thenReturn(null);
 
-    final ResponseEntity<UserDto> result = this.controller.getUserByUserName("username");
+    final ResponseEntity<UserDetailDto> result = this.controller.getUserByUserName("username");
 
     assertNotNull(result);
     assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
