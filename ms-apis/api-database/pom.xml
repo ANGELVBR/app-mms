@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.3.0</version>
+                <version>6.6.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -61,6 +61,7 @@
                                 <swaggerDocketConfig>false</swaggerDocketConfig>
                                 <performBeanValidation>false</performBeanValidation>
                                 <useBeanValidation>false</useBeanValidation>
+                                <generateSupportingFiles>true</generateSupportingFiles>
                             </configOptions>
 
                             <generateApiTests>false</generateApiTests>
@@ -71,9 +72,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            
         </plugins>
     </build>
-    
 </project>

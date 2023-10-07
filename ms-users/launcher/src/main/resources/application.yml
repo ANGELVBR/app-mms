@@ -1,7 +1,8 @@
 server:
   port: 8002
 logging:
-  level:
+  root: debug
+  level: 
     org.springframework.boot.autoconfigure.jdbc: DEBUG
     org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration: DEBUG
 
